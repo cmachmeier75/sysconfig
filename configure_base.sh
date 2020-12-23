@@ -1,14 +1,8 @@
 #!/bin/bash
 
-echo "Cloning dotFiles"
-git clone --bare git@bitbucket.org:cmachmeier/dotfiles.git $HOME/.dotFiles
-source $HOME/.bashrc
-dotty config --local status.showUntrackedFiles no
-dotty checkout
-
-echo "Cloning sys.config"
-md $HOME/Repositories/ccnet.sys.config/
-git clone git@bitbucket.org:cmachmeier/ccnet.sys.config.git $HOME/Repositories/
+echo ""
+openssl
+openssh-server
 
 echo "Updating firewall rules (SSH)"
 sudo ufw allow ssh
@@ -16,4 +10,10 @@ sudo ufw enable
 sudo ufw status
 
 echo "Configuring AWS"
-# aws configure --profile funanga
+aws configure --profile cm
+
+
+echo "Enabling Gnome Shell extensions"
+gsettings set org.gnome.shell disable-user-extensions false
+gnome-extensions enable dash-to-panel@jderose9.github.com
+gnome-extensions enable no-title-bar@jonaspoehler.de

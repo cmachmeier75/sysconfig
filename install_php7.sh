@@ -1,6 +1,6 @@
 #!/bin/bash
 
-echo "Installing PHP 7.4"
+echo "Installing PHP 7"
 sudo add-apt-repository ppa:ondrej/php
 sudo apt-get update
 sudo apt-get install php7.4
@@ -9,4 +9,3 @@ php --version
 
 echo "Installing Apache2"
 sudo apt-get install apache2
-
