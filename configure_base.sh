@@ -1,8 +1,6 @@
 #!/bin/bash
 
 echo "Configuring openssh-'server'.."
-sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.factory-defaults
-sudo chmod a-w /etc/ssh/sshd_config.factory-defaults
 read -r -d '' sshd_config <<'EOF'
 PermitRootLogin no
 MaxAuthTries 3
@@ -24,7 +22,10 @@ AllowUsers ubuntu
 
 EOF
 
-sudo echo "$sshd_config" > /etc/ssh/sshd_config
+sudo cp /etc/ssh/sshd_config /etc/ssh/sshd_config.factory-defaults
+sudo chmod a-w /etc/ssh/sshd_config.factory-defaults
+echo "$sshd_config" > ~/sshd_config
+sudo mv ~/sshd_config /etc/ssh/sshd_config
 sudo systemctl restart ssh
 
 echo "Creating personal SSH-key.."
@@ -49,5 +50,6 @@ fc-cache -fv
 
 echo "Enabling Gnome Shell extensions.."
 gsettings set org.gnome.shell disable-user-extensions false
+gnome-shell --replace
 gnome-extensions enable dash-to-panel@jderose9.github.com
 gnome-extensions enable no-title-bar@jonaspoehler.de
