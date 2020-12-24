@@ -8,6 +8,11 @@ sudo apt-get autoremove -y
 sudo apt-get autoclean
 
 
+# SYSTEM UPGRADE
+echo "Upgrading distribution release"
+sudo do-release-update
+
+
 # BASE PACKAGES
 echo "Installing base packages.."
 base_packages=( apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl zip )
@@ -57,6 +62,10 @@ sudo add-apt-repository ppa:stebbins/handbrake-releases
 echo " > Ghostwriter"
 sudo add-apt-repository ppa:wereturtle/ppa
 
+echo " > Syncthing"
+curl -fsSL https://syncthing.net/release-key.txt | sudo apt-key add -
+sudo add-apt-repository "deb https://apt.syncthing.net/ syncthing stable"
+
 echo "Refreshing list of packages.."
 sudo apt-get update -y
 
@@ -83,6 +92,8 @@ sudo apt-get install codium
 
 echo " > Spotify"
 sudo apt-get install spotify-client
+echo " > Spicetify"
+curl -fsSL https://raw.githubusercontent.com/khanhas/spicetify-cli/master/install.sh | sh
 
 echo " > Handbrake"
 sudo apt-get install handbrake-gtk
@@ -90,8 +101,5 @@ sudo apt-get install handbrake-gtk
 echo " > Ghostwriter"
 sudo apt-get install ghostwriter
 
-
-# SYSTEM UPGRADE
-echo "Upgrading distribution release"
-sudo do-release-update
-
+echo " > Syncthing"
+sudo apt-get install syncthing

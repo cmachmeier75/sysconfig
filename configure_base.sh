@@ -24,14 +24,15 @@ AllowUsers ubuntu
 
 EOF
 
-sudo echo "$sshd_config" > ./sshd_config_test
+sudo echo "$sshd_config" > /etc/ssh/sshd_config
 sudo systemctl restart ssh
 
 echo "Creating personal SSH-key.."
 ssh-keygen -t rsa -b 4096
 
 cat ~/.ssh/id_rsa
-
+echo "^^^ That's your SSH private key, store it securely!"
+echo ""
 echo "Adding your public SSH-key to 'authorized_keys'"
 cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
 
