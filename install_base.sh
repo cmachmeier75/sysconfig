@@ -93,9 +93,9 @@ sudo apt-get install codium -y
 echo " > Spotify"
 sudo apt-get install spotify-client -y
 echo " > Spicetify"
+mkdir ~/bin/ && cd ~/bin/
 curl -fsSL https://raw.githubusercontent.com/khanhas/spicetify-cli/master/install.sh | sh
-mkdir ~/bin/
-mv ~/spicetify-cli/ ~/bin/
+cd ~
 
 echo " > Handbrake"
 sudo apt-get install handbrake-gtk -y

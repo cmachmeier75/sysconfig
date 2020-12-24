@@ -32,10 +32,7 @@ echo "Creating personal SSH-key.."
 ssh-keygen -t rsa -b 4096
 
 cat ~/.ssh/id_rsa
-echo "^^^ That's your SSH private key, store it securely!"
-echo ""
-echo "Adding your public SSH-key to 'authorized_keys'"
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys
+echo "^^^ ^^^ That's your SSH private key, store it securely! ^^^ ^^^"
 
 echo "Updating firewall rules (SSH).."
 sudo ufw allow ssh
