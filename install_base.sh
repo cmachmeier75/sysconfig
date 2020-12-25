@@ -8,11 +8,6 @@ sudo apt-get autoremove -y
 sudo apt-get autoclean
 
 
-# SYSTEM UPGRADE
-echo "UPGRADING DISTRIBUTION RELEASE.."
-sudo do-release-update
-
-
 # BASE PACKAGES
 echo "Installing BASE PACKAGES.."
 base_packages=( apt-transport-https ca-certificates curl gnupg-agent software-properties-common openssl zip )
