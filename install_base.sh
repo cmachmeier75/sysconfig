@@ -24,7 +24,7 @@ done
 
 # OPTIONAL PACKAGES
 echo "Installing OPTIONAL PACKAGES.."
-opt_packages=( gcc make perl vim synaptic gnome-tweaks openssh-server ufw awscli )
+opt_packages=( gcc make perl vim mc synaptic gnome-tweaks openssh-server ufw awscli chromium-browser )
 for op in "${opt_packages[@]}"; do
     echo " > $op";
     sudo apt-get install $op -y;
