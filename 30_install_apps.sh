@@ -2,7 +2,7 @@
 
 # OPTIONAL PACKAGES
 echo "Installing OPTIONAL PACKAGES.."
-packages=( awscli chromium-browser gnome-tweaks lxappearance mc newsboat synaptic vim )
+packages=( awscli chromium-browser gnome-tweaks lxappearance mc newsboat synaptic tmux vim )
 for p in "${packages[@]}"; do
     echo " > $p";
     sudo apt-get install $p -y;
