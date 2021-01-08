@@ -1,7 +1,6 @@
 #!/bin/bash
 
-echo "Configuring AWS"
-# aws configure --profile cm
+echo "Configuring USER APPLICATIONS.."
 
 echo "Refreshing font-cache.."
 fc-cache -fv
@@ -10,6 +9,9 @@ echo "Enabling Gnome Shell extensions.."
 gsettings set org.gnome.shell disable-user-extensions false
 gnome-extensions enable dash-to-panel@jderose9.github.com
 gnome-extensions enable no-title-bar@jonaspoehler.de
+
+echo "Disabling headerbar in Gnome Terminal.."
+gsettings set org.gnome.Terminal.Legacy.Settings headerbar false
 
 echo "Configuring spicetify-cli.."
 sudo chmod a+wr /usr/share/spotify

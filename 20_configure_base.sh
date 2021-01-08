@@ -1,5 +1,7 @@
 #!/bin/bash
 
+echo "Configuring BASE PACKAGES.."
+
 echo "Configuring openssh-'server'.."
 read -r -d '' sshd_config <<'EOF'
 PermitRootLogin no

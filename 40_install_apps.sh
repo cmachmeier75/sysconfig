@@ -1,15 +1,7 @@
 #!/bin/bash
 
-# OPTIONAL PACKAGES
-echo "Installing OPTIONAL PACKAGES.."
-packages=( awscli chromium-browser gnome-tweaks lxappearance mc newsboat ranger qt5ct synaptic tmux vim )
-for p in "${packages[@]}"; do
-    echo " > $p";
-    sudo apt-get install $p -y;
-done
-
-# CUSTOM PACKAGES
-echo "Adding CUSTOM PACKAGE REPOS.."
+echo "Installing USER APPLICATIONS.."
+echo "Adding repositories.."
 echo " > BeeKeeper"
 curl -fsSL https://bintray.com/user/downloadSubjectPublicKey?username=bintray | gpg --dearmor | sudo dd of=/etc/apt/trusted.gpg.d/beekeeper.gpg
 yes "" | sudo add-apt-repository "deb [arch=amd64] https://dl.bintray.com/beekeeper-studio/releases disco main"
@@ -50,7 +42,7 @@ yes "" | sudo add-apt-repository "deb [arch=amd64] https://paulcarroty.gitlab.io
 echo "Refreshing list of packages.."
 sudo apt-get update -y
 
-echo "Installing CUSTOM PACKAGES.."
+echo "Installing.."
 echo " > BeeKeeper"
 sudo apt-get install beekeeper-studio -y
 
