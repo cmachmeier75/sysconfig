@@ -1,63 +1,91 @@
 #!/bin/bash
 
-sudo mkdir b.ccnet.me
-sudo mkdir m.ccnet.me
-sudo mkdir n.ccnet.me
-sudo mkdir r.ccnet.me
-sudo mkdir s.ccnet.me
-sudo mkdir v.ccnet.me
-sudo mkdir www.ccnet.me
+echo "Configuring APACHE HTTP SERVER.."
 
-cd b.ccnet.me/ && sudo wget https://github.com/sabre-io/Baikal/releases/download/0.7.2/baikal-0.7.2.zip
+for i in b m n r s v www; do
 
-cd ../r.ccnet.me/
+    echo "Creating document_root for '"$i".ccnet.me'.."
+    cd /srv/
+    sudo mkdir ./"$i".ccnet.me
 
-sudo vim b.ccnet.me/index.html 
-sudo cp b.ccnet.me/index.html m.ccnet.me/
-sudo cp b.ccnet.me/index.html n.ccnet.me/
-sudo cp b.ccnet.me/index.html r.ccnet.me/
-sudo cp b.ccnet.me/index.html s.ccnet.me/
-sudo cp b.ccnet.me/index.html v.ccnet.me/
-sudo vim m.ccnet.me/index.html 
-sudo vim n.ccnet.me/index.html 
-sudo vim r.ccnet.me/index.html 
-sudo vim s.ccnet.me/index.html 
-sudo vim v.ccnet.me/index.html 
+    read -r -d '' indexhtml <<'EOF'
+<!DOCTYPE html PUBLIC
+    "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+    <head>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <title>This page was intentionally left blank</title>
+        <style type="text/css">
+        * { margin: 0; padding: 0; }
+        body, html { padding: 3px; background-color: #D8DBE2; font-family: 'Open Sans', sans-serif; }
+        </style>
+    </head>
+    <body>
+        <h1>This page was intentionally left blank</h1>
+        <p>($i.ccnet.me)</p>
+    </body>
+</html>
 
-cd /etc/apache2/
-sudo vim mods-enabled/dir.conf 
+EOF
+
+    echo "$indexhtml" > ~/index.html
+    sudo mv ~/index.html ./"$i".ccnet.me/index.html
+    
+    echo "Creating virtual_host-config for '"$i".ccnet.me'.."
+    cd /etc/apache2/sites-available/
+
+    read -r -d '' vhostconf <<'EOF'
+<VirtualHost *:80>
+    ServerName $i.ccnet.me
+    ServerAdmin webmaster@ccnet.me
+    DocumentRoot /srv/$i.ccnet.me
+    <Directory /srv/$i.ccnet.me/>
+        Options Indexes MultiViews FollowSymlinks
+        AllowOverride All
+        Require all granted
+    </Directory>
+    ErrorLog ${APACHE_LOG_DIR}/error.log
+    CustomLog ${APACHE_LOG_DIR}/access.log combined
+    RewriteEngine on
+    RewriteCond %{SERVER_NAME} =$i.ccnet.me
+    RewriteRule ^ https://%{SERVER_NAME}%{REQUEST_URI} [END,NE,R=permanent]
+</VirtualHost>
+
+EOF
+
+    echo "$vhostconf" > ~/vhostconf
+    sudo mv ~/vhostconf ./"$i"-ccnet-me.conf
+    sudo a2ensite "$i"-ccnet-me
+
+    echo "Creating 'hosts'-entry for '"$i".ccnet.me'.."
+    echo "217.160.214.184 $i.ccnet.me$(cat /etc/hosts)" > ~/hosts.new
+    sudo mv ~/hosts.new /etc/hosts
+
+done;
+
+echo "Disabling default sites.."
+sudo a2dissite 000-default
+sudo a2dissite default-ssl
+
+echo "Enabling mod_rewrite.."
 sudo a2enmod rewrite
-sudo cp sites-available/000-default.conf sites-available/b-ccnet-me.conf
-sudo vim sites-available/b-ccnet-me.conf
-less sites-available/default-ssl.conf 
-sudo cp sites-available/b-ccnet-me.conf sites-available/m-ccnet-me.conf 
-sudo cp sites-available/b-ccnet-me.conf sites-available/n-ccnet-me.conf 
-sudo cp sites-available/b-ccnet-me.conf sites-available/r-ccnet-me.conf 
-sudo cp sites-available/b-ccnet-me.conf sites-available/s-ccnet-me.conf 
-sudo cp sites-available/b-ccnet-me.conf sites-available/v-ccnet-me.conf 
-sudo cp sites-available/b-ccnet-me.conf sites-available/www-ccnet-me.conf 
-sudo vim sites-available/m-ccnet-me.conf
-sudo vim sites-available/n-ccnet-me.conf
-sudo vim sites-available/r-ccnet-me.conf
-sudo vim sites-available/s-ccnet-me.conf
-sudo vim sites-available/v-ccnet-me.conf
-sudo vim sites-available/www-ccnet-me.conf
-sudo a2ensite
-sudo a2ensite b-ccnet-me m-ccnet-me n-ccnet-me r-ccnet-me s-ccnet-me v-ccnet-me www-ccnet-me
-sudo vim /etc/hosts
-217.160.214.184 b.ccnet.me
-217.160.214.184 m.ccnet.me
-217.160.214.184 n.ccnet.me
-217.160.214.184 r.ccnet.me
-217.160.214.184 s.ccnet.me
-217.160.214.184 v.ccnet.me
-217.160.214.184 www.ccnet.me ccnet.me
 
+echo "Setting file permissions for user 'www-data'.."
+sudo chown -R www-data /srv/*
+sudo chgrp -R www-data /srv/*
+
+echo "Reloading Apache config.."
+sudo apache2ctl configtest
+sudo systemctl reload apache2
+
+echo "Updating firewall rules (Apache).."
 sudo ufw allow 'Apache Full'
 sudo ufw status
-sudo chown -R www-data *
-sudo chgrp -R www-data *
 
+echo "Installing certbot.."
 sudo apt install certbot python3-certbot-apache
+
+echo "Running certbot.."
 sudo certbot --apache
 sudo systemctl status certbot.timer

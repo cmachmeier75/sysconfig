@@ -2,7 +2,7 @@
 
 echo "Configuring BASE PACKAGES.."
 
-echo "Configuring openssh-'server'.."
+echo "Configuring openssh-server.."
 read -r -d '' sshd_config <<'EOF'
 PermitRootLogin no
 MaxAuthTries 3
@@ -37,6 +37,6 @@ cat ~/.ssh/id_rsa
 echo "^^^ ^^^ That's your SSH private key, store it securely! ^^^ ^^^"
 
 echo "Updating firewall rules (SSH).."
-sudo ufw allow ssh
 sudo ufw enable
+sudo ufw allow ssh
 sudo ufw status
