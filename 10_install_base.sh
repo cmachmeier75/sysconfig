@@ -7,7 +7,7 @@ sudo apt-get autoremove -y
 sudo apt-get autoclean
 
 echo "Installing BASE PACKAGES.."
-packages=( apt-transport-https ca-certificates curl gcc gnupg-agent make perl openssh-server openssl software-properties-common ufw zip )
+packages=( awscli apt-transport-https ca-certificates curl gcc gnupg-agent make perl openssh-server openssl software-properties-common vim ufw zip )
 for p in "${packages[@]}"; do
     echo " > $p";
     sudo apt-get install $p -y;
